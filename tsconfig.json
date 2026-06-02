@@ -13,6 +13,7 @@
     "removeComments": true,
     "esModuleInterop": true,
     "noEmit": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
     "experimentalDecorators": true
   }
