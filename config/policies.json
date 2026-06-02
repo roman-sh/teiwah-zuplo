@@ -1,0 +1,26 @@
+{
+  "policies": [
+    {
+      "handler": {
+        "export": "ClerkJwtInboundPolicy",
+        "module": "$import(@zuplo/runtime)",
+        "options": {
+          "allowUnauthenticatedRequests": false,
+          "frontendApiUrl": "$env(CLERK_FRONTEND_API_URL)",
+          "oAuthResourceMetadataEnabled": false
+        }
+      },
+      "name": "clerk-jwt-auth-inbound",
+      "policyType": "clerk-jwt-auth-inbound"
+    },
+    {
+      "handler": {
+        "export": "default",
+        "module": "$import(./modules/forward-user-id)",
+        "options": {}
+      },
+      "name": "forward-user-id",
+      "policyType": "custom-code-inbound"
+    }
+  ]
+}

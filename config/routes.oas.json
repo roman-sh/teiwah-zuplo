@@ -1,0 +1,167 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Teiwah API"
+  },
+  "paths": {
+    "/sessions": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Get user's WA sessions",
+        "operationId": "get-sessions",
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://control.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      },
+      "post": {
+        "summary": "Create WA session",
+        "operationId": "create-session",
+        "responses": {
+          "201": { "description": "Created" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://control.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
+    "/sessions/{id}/webhook": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "patch": {
+        "summary": "Update session webhook URL",
+        "operationId": "update-session-webhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://control.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
+    "/sessions/{id}/api-key": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Reveal session API key",
+        "operationId": "get-session-api-key",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://control.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
+    "/sessions/{id}/events": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Session SSE stream (QR, status)",
+        "operationId": "get-session-events",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "SSE stream" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://k3s.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
