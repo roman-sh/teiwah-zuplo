@@ -21,6 +21,21 @@
       },
       "name": "forward-user-id",
       "policyType": "custom-code-inbound"
+    },
+    {
+      "handler": {
+        "export": "ApiKeyInboundPolicy",
+        "module": "$import(@zuplo/runtime)",
+        "options": {
+          "allowUnauthenticatedRequests": false,
+          "authHeader": "Authorization",
+          "authScheme": "Bearer",
+          "bucketName": "$env(TEIWAH_KEY_BUCKET)",
+          "cacheTtlSeconds": 60
+        }
+      },
+      "name": "session-api-key-inbound",
+      "policyType": "api-key-inbound"
     }
   ]
 }

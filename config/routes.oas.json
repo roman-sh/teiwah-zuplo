@@ -128,6 +128,54 @@
         }
       }
     },
+    "/messages": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Send WhatsApp message (session API key)",
+        "operationId": "post-session-message",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["to", "text"],
+                "properties": {
+                  "to": {
+                    "type": "string",
+                    "description": "Recipient JID (use inbound webhook `from` for 1:1 replies)"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Message text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Message sent" },
+          "401": { "description": "Invalid or missing API key" },
+          "503": { "description": "Session not connected" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "default",
+            "module": "$import(./modules/messages-forward)",
+            "options": {
+              "k3sBaseUrl": "https://k3s.teiwah.cloud"
+            }
+          },
+          "policies": {
+            "inbound": ["session-api-key-inbound"]
+          }
+        }
+      }
+    },
     "/sessions/{id}/events": {
       "x-zuplo-path": {
         "pathMode": "open-api"
