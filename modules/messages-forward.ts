@@ -1,20 +1,4 @@
-import { ZuploContext, ZuploRequest } from "@zuplo/runtime";
-
-type RouteWithK3sOptions = {
-  "x-zuplo-route"?: {
-    handler?: {
-      options?: {
-        k3sBaseUrl?: string;
-      };
-    };
-  };
-};
-
-function k3sBaseUrlFromRoute(context: ZuploContext): string | null {
-  const raw = context.route.raw<RouteWithK3sOptions>();
-  const url = raw?.["x-zuplo-route"]?.handler?.options?.k3sBaseUrl?.trim();
-  return url || null;
-}
+import { environment, ZuploContext, ZuploRequest } from "@zuplo/runtime";
 
 /**
  * POST /messages — forward to the session worker after API key auth.
@@ -22,8 +6,7 @@ function k3sBaseUrlFromRoute(context: ZuploContext): string | null {
  * session-api-key-inbound sets request.user.sub = Zuplo consumer name (= sessionId).
  * Worker path: POST /sessions/:sessionId/messages (Traefik strips prefix → pod /messages).
  *
- * Custom request handlers only receive (request, context) — route handler.options
- * are read via context.route.raw(), not a third function argument.
+ * INGRESS_URL from teiwah-zuplo/.env (local) or Zuplo portal (prod) — k3s Traefik base.
  */
 export default async function (
   request: ZuploRequest,
@@ -38,11 +21,11 @@ export default async function (
     });
   }
 
-  const k3sBaseUrl = k3sBaseUrlFromRoute(context);
+  const k3sBaseUrl = environment.INGRESS_URL?.trim();
   if (!k3sBaseUrl) {
-    context.log.error("POST /messages: k3sBaseUrl missing in route handler.options");
+    context.log.error("POST /messages: INGRESS_URL env var is not set");
     return new Response(
-      JSON.stringify({ message: "Route misconfigured: k3sBaseUrl required" }),
+      JSON.stringify({ message: "Route misconfigured: INGRESS_URL required" }),
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }

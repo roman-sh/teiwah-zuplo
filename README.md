@@ -1,29 +1,15 @@
-## Zuplo API
+# teiwah-zuplo
 
-This is a Zuplo API that was created with
-[`create-zuplo-api`](https://zuplo.com/docs).
+Zuplo API gateway for Teiwah (`api.teiwah.cloud`).
 
-## Getting Started
+**Deploy, env vars, `ZUPLO_ORIGIN`:** [teiwah-infra/README.md](../teiwah-infra/README.md)
 
-First, run the development server:
+**Routes / policies / handlers:** `config/routes.oas.json`, `config/policies.json`, `modules/`
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npm install
+npm run dev          # http://localhost:9000
+npm run typecheck
 ```
 
-Open [http://localhost:9000](http://localhost:9000) with your browser to see the
-result.
-
-You can start editing the API by modifying `config/routes.oas.json`. The dev
-server will automatically reload the API with your changes.
-
-## Learn More
-
-To learn more about Zuplo, you can visit the
-[Zuplo documentation](https://zuplo.com/docs).
-
-To connect with the community join [Discord](https://discord.zuplo.com).
+[Zuplo docs](https://zuplo.com/docs)

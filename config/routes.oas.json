@@ -21,7 +21,7 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://control.teiwah.cloud"
+              "baseUrl": "${env.CONTROL_URL}"
             }
           },
           "policies": {
@@ -44,7 +44,7 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://control.teiwah.cloud"
+              "baseUrl": "${env.CONTROL_URL}"
             }
           },
           "policies": {
@@ -80,7 +80,7 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://control.teiwah.cloud"
+              "baseUrl": "${env.CONTROL_URL}"
             }
           },
           "policies": {
@@ -116,7 +116,7 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://control.teiwah.cloud"
+              "baseUrl": "${env.CONTROL_URL}"
             }
           },
           "policies": {
@@ -165,10 +165,7 @@
           "corsPolicy": "anything-goes",
           "handler": {
             "export": "default",
-            "module": "$import(./modules/messages-forward)",
-            "options": {
-              "k3sBaseUrl": "https://k3s.teiwah.cloud"
-            }
+            "module": "$import(./modules/messages-forward)"
           },
           "policies": {
             "inbound": ["session-api-key-inbound"]
@@ -200,7 +197,7 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://k3s.teiwah.cloud"
+              "baseUrl": "${env.INGRESS_URL}"
             }
           },
           "policies": {
