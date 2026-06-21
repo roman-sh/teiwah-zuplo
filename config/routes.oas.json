@@ -56,6 +56,34 @@
         }
       }
     },
+    "/billing/checkout": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Create license-scoped Freemius checkout (Subscribe/upgrade)",
+        "operationId": "create-billing-checkout",
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.CONTROL_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
     "/sessions/{id}/webhook": {
       "x-zuplo-path": {
         "pathMode": "open-api"
