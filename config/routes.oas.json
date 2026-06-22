@@ -84,6 +84,34 @@
         }
       }
     },
+    "/billing/sandbox": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Get Freemius sandbox params for the new-purchase overlay (dev only)",
+        "operationId": "get-billing-sandbox",
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.CONTROL_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
     "/sessions/{id}/webhook": {
       "x-zuplo-path": {
         "pathMode": "open-api"
