@@ -229,6 +229,39 @@
         }
       }
     },
+    "/media/{id}": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Download inbound media by message id (session API key)",
+        "operationId": "get-media",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Native WhatsApp message id from the inbound webhook"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Media bytes (streamed; original Content-Type)" },
+          "401": { "description": "Invalid or missing API key" },
+          "404": { "description": "Media not found or expired" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "default",
+            "module": "$import(./modules/media-forward)"
+          },
+          "policies": {
+            "inbound": ["session-api-key-inbound"]
+          }
+        }
+      }
+    },
     "/sessions/{id}/events": {
       "x-zuplo-path": {
         "pathMode": "open-api"
