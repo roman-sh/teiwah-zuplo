@@ -24,6 +24,15 @@
     },
     {
       "handler": {
+        "export": "default",
+        "module": "$import(./modules/outbound-media-base2url)",
+        "options": {}
+      },
+      "name": "outbound-media-base2url",
+      "policyType": "custom-code-inbound"
+    },
+    {
+      "handler": {
         "export": "ApiKeyInboundPolicy",
         "module": "$import(@zuplo/runtime)",
         "options": {

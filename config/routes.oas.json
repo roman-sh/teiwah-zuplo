@@ -197,15 +197,42 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["to", "text"],
+                "required": ["chatId"],
                 "properties": {
-                  "to": {
+                  "chatId": {
                     "type": "string",
-                    "description": "Recipient JID (use inbound webhook `from` for 1:1 replies)"
+                    "description": "Reply address: bare phone number or full JID/LID (use the inbound webhook `chatId`)"
                   },
                   "text": {
                     "type": "string",
-                    "description": "Message text"
+                    "description": "Message text. Provide either `text` or `media` (exactly one)."
+                  },
+                  "media": {
+                    "type": "object",
+                    "description": "Media to send. Supply either `url` or `base64` (base64 is normalized to a temporary URL by the gateway before reaching the worker).",
+                    "required": ["type"],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": ["image", "ptt", "audio", "video", "document"]
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Publicly fetchable media URL."
+                      },
+                      "base64": {
+                        "type": "string",
+                        "description": "Base64-encoded media bytes (max 16 MB decoded; larger → 413). Normalized to a URL by the gateway; the worker only ever receives a URL."
+                      },
+                      "caption": { "type": "string" },
+                      "mimeType": { "type": "string" },
+                      "filename": { "type": "string" }
+                    }
+                  },
+                  "quoteMessageId": {
+                    "type": "string",
+                    "description": "Native id of a message to reply-quote (best-effort)."
                   }
                 }
               }
@@ -215,6 +242,7 @@
         "responses": {
           "200": { "description": "Message sent" },
           "401": { "description": "Invalid or missing API key" },
+          "413": { "description": "media.base64 exceeds the 16 MB decoded limit" },
           "503": { "description": "Session not connected" }
         },
         "x-zuplo-route": {
@@ -224,7 +252,7 @@
             "module": "$import(./modules/messages-forward)"
           },
           "policies": {
-            "inbound": ["session-api-key-inbound"]
+            "inbound": ["session-api-key-inbound", "outbound-media-base2url"]
           }
         }
       }

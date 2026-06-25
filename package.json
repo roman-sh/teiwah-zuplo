@@ -10,6 +10,8 @@
     "docs": "zuplo docs"
   },
   "dependencies": {
+    "aws4fetch": "^1.0.20",
+    "js-base64": "^3.8.0",
     "zuplo": "^6"
   },
   "devDependencies": {
