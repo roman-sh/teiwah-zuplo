@@ -248,11 +248,107 @@
         "x-zuplo-route": {
           "corsPolicy": "anything-goes",
           "handler": {
-            "export": "default",
-            "module": "$import(./modules/messages-forward)"
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
           },
           "policies": {
-            "inbound": ["session-api-key-inbound", "outbound-media-base2url"]
+            "inbound": [
+              "session-api-key-inbound",
+              "outbound-media-base2url",
+              "patch-session-from-bearer"
+            ]
+          }
+        }
+      }
+    },
+    "/typing": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Show typing indicator in a chat (session API key)",
+        "operationId": "post-session-typing",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["chatId"],
+                "properties": {
+                  "chatId": {
+                    "type": "string",
+                    "description": "Conversation address (use the inbound webhook `chatId`)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Typing indicator sent" },
+          "401": { "description": "Invalid or missing API key" },
+          "503": { "description": "Session not connected" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
+          },
+          "policies": {
+            "inbound": ["session-api-key-inbound", "patch-session-from-bearer"]
+          }
+        }
+      }
+    },
+    "/read": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Mark an inbound message as read (session API key)",
+        "operationId": "post-session-read",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["messageId"],
+                "properties": {
+                  "messageId": {
+                    "type": "string",
+                    "description": "Native WhatsApp message id from the inbound webhook"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Message marked read" },
+          "401": { "description": "Invalid or missing API key" },
+          "404": { "description": "Unknown messageId (not in recent cache)" },
+          "503": { "description": "Session not connected" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
+          },
+          "policies": {
+            "inbound": ["session-api-key-inbound", "patch-session-from-bearer"]
           }
         }
       }
@@ -281,11 +377,14 @@
         "x-zuplo-route": {
           "corsPolicy": "anything-goes",
           "handler": {
-            "export": "default",
-            "module": "$import(./modules/media-forward)"
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
           },
           "policies": {
-            "inbound": ["session-api-key-inbound"]
+            "inbound": ["session-api-key-inbound", "patch-session-from-bearer"]
           }
         }
       }

@@ -33,6 +33,15 @@
     },
     {
       "handler": {
+        "export": "default",
+        "module": "$import(./modules/patch-session-from-bearer)",
+        "options": {}
+      },
+      "name": "patch-session-from-bearer",
+      "policyType": "custom-code-inbound"
+    },
+    {
+      "handler": {
         "export": "ApiKeyInboundPolicy",
         "module": "$import(@zuplo/runtime)",
         "options": {

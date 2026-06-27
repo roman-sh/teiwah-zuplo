@@ -8,7 +8,7 @@ import { environment, ZuploContext, ZuploRequest } from "@zuplo/runtime";
  * The worker contract is URL-only: it never accepts base64. A customer may send
  * media as base64 (convenient for AI/automation), so this policy intercepts the
  * request, uploads the decoded bytes to R2 under a random key, and rewrites the
- * body to `media.url` before the request reaches messages-forward → the worker.
+ * body to `media.url` before patch-session-from-bearer forwards to the worker.
  *
  * Runs AFTER session-api-key-inbound (so unauthenticated requests never trigger
  * an upload). Pass-through for text messages and url-only media.
