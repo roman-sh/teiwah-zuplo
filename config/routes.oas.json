@@ -423,6 +423,41 @@
           }
         }
       }
+    },
+    "/sessions/{id}/reconnect": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Re-initiate the session connection after a logout",
+        "operationId": "post-session-reconnect",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "202": { "description": "Reconnect initiated (watch /events for QR/status)" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound"
+            ]
+          }
+        }
+      }
     }
   }
 }
