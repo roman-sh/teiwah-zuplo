@@ -84,6 +84,34 @@
         }
       }
     },
+    "/billing/portal": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "Magic-login link to the Freemius customer portal",
+        "operationId": "get-billing-portal",
+        "responses": {
+          "200": { "description": "OK" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.CONTROL_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
+            ]
+          }
+        }
+      }
+    },
     "/billing/sandbox": {
       "x-zuplo-path": {
         "pathMode": "open-api"
@@ -454,6 +482,77 @@
           "policies": {
             "inbound": [
               "clerk-jwt-auth-inbound"
+            ]
+          }
+        }
+      }
+    },
+    "/sessions/{id}/disconnect": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Disconnect (log out) the session",
+        "operationId": "post-session-disconnect",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "202": { "description": "Disconnect initiated (watch /events for status)" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.INGRESS_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound"
+            ]
+          }
+        }
+      }
+    },
+    "/sessions/{id}": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "delete": {
+        "summary": "Delete a session (tear down worker, revoke API key)",
+        "operationId": "delete-session",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Session deleted" }
+        },
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "${env.CONTROL_URL}"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "clerk-jwt-auth-inbound",
+              "forward-user-id"
             ]
           }
         }
