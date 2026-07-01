@@ -1,5 +1,5 @@
-import { AwsClient } from "aws4fetch";
-import { Base64 } from "js-base64";
+import { AwsClient } from "./third-party/aws4fetch/aws4fetch.esm.js";
+import { Base64 } from "./third-party/js-base64/base64.js";
 import { environment, ZuploContext, ZuploRequest } from "@zuplo/runtime";
 
 /**

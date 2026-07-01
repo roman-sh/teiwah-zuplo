@@ -4,6 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "bundle": "npm run bundle:aws4fetch && npm run bundle:js-base64",
+    "bundle:aws4fetch": "tsdown ./node_modules/aws4fetch/dist/aws4fetch.esm.mjs --format esm --platform browser --out-dir ./modules/third-party/aws4fetch",
+    "bundle:js-base64": "tsdown ./node_modules/js-base64/base64.mjs --format esm --platform browser --out-dir ./modules/third-party/js-base64",
     "dev": "zuplo dev",
     "test": "zuplo test",
     "typecheck": "tsc --noEmit",
@@ -16,6 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "^22",
+    "tsdown": "^0.22.3",
     "typescript": "^5"
   },
   "workspaces": [
